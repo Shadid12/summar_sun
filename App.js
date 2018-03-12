@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {Container, Header, Button, Content, Form, Item, Input, Label, Left, Body, Right, Title} from 'native-base';
+import {Container, Header, Button, Content, Form, Item, Input, Label, Body, Title} from 'native-base';
+import EventList from './components/EventList';
 
 export default class App extends React.Component {
 
@@ -10,8 +11,9 @@ export default class App extends React.Component {
             email: '',
             username: '',
             password: '',
-            loggedin: false,
-            fontLoaded: false
+            register: true,
+            fontLoaded: false,
+            loggedIn: true
         }
     }
 
@@ -27,34 +29,46 @@ export default class App extends React.Component {
 
 
     render() {
-
-        if (!this.state.loggedin) {
+        if (this.state.loggedIn) {
+          return (
+            this.state.fontLoaded ? (
+              <EventList />
+            ): null
+          )
+        }
+        else if (this.state.register) {
             return (
                 this.state.fontLoaded ? (
                     <Container>
-                    <Header>
-                      <Body>
-                            <Title style={[styles.title]}>Register Now</Title>
-                      </Body>
-                    </Header>
-                    <Content>
-                        <Form>
-                            <Item floatingLabel>
-                                <Label>Email </Label>
-                                <Input onChangeText={(email) => this.setState({email})}/>
-                            </Item>
-                            <Item floatingLabel>
-                                <Label>Password</Label>
-                                <Input secureTextEntry={true} onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-                        </Form>
-                        <View style={[styles.layout]}>
-                            <Button full info onPress={() => this.setState({loggedin: true})}>
-                                <Text>Register </Text>
-                            </Button>
-                        </View>
-                    </Content>
-                </Container>
+                        <Header>
+                          <Body>
+                                <Title style={[styles.title]}>Register Now</Title>
+                          </Body>
+                        </Header>
+                        <Content>
+                            <Form>
+                                <Item floatingLabel>
+                                    <Label>Email </Label>
+                                    <Input onChangeText={(email) => this.setState({email})}/>
+                                </Item>
+                                <Item floatingLabel>
+                                    <Label>Password</Label>
+                                    <Input secureTextEntry={true} onChangeText={(password) => this.setState({password})}/>
+                                </Item>
+                            </Form>
+                            <View style={[styles.layout]}>
+                                <Button full info onPress={() => this.setState({register: true})}>
+                                    <Text>Register </Text>
+                                </Button>
+                            </View>
+
+                            <View style={[styles.layout]}>
+                                <Button full success onPress={() => this.setState({register: !this.state.register})}>
+                                    <Text>Login </Text>
+                                </Button>
+                            </View>
+                        </Content>
+                    </Container>
                 ) : null
             );
         }
@@ -80,8 +94,13 @@ export default class App extends React.Component {
                                 </Item>
                             </Form>
                             <View style={[styles.layout]}>
-                                <Button full info onPress={() => this.setState({loggedin: false})}>
+                                <Button full success onPress={() => this.setState({register: false})}>
                                     <Text>Login</Text>
+                                </Button>
+                            </View>
+                            <View style={[styles.layout]}>
+                                <Button full info onPress={() => this.setState({register: true})}>
+                                    <Text>Register</Text>
                                 </Button>
                             </View>
                         </Content>
